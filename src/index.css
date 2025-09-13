@@ -8,35 +8,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Casino/Luxury Theme */
+    --background: 240 15% 8%;
+    --foreground: 45 100% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 240 12% 12%;
+    --card-foreground: 45 100% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 12% 12%;
+    --popover-foreground: 45 100% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 100% 60%;
+    --primary-foreground: 240 15% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 250 70% 25%;
+    --secondary-foreground: 45 100% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 240 8% 20%;
+    --muted-foreground: 45 20% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 280 100% 70%;
+    --accent-foreground: 240 15% 8%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 45 100% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 8% 25%;
+    --input: 240 8% 20%;
+    --ring: 45 100% 60%;
 
-    --radius: 0.5rem;
+    /* Custom Design Tokens */
+    --gold: 45 100% 60%;
+    --gold-light: 48 100% 75%;
+    --gold-dark: 42 100% 45%;
+    
+    --purple: 280 100% 70%;
+    --purple-dark: 270 80% 35%;
+    
+    --gradient-gold: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)));
+    --gradient-purple: linear-gradient(135deg, hsl(var(--purple-dark)), hsl(var(--purple)));
+    --gradient-winner: linear-gradient(45deg, hsl(var(--gold)) 0%, hsl(var(--accent)) 50%, hsl(var(--gold)) 100%);
+    
+    --shadow-gold: 0 0 30px hsl(var(--gold) / 0.5);
+    --shadow-purple: 0 0 20px hsl(var(--purple) / 0.3);
+    --shadow-intense: 0 0 50px hsl(var(--gold) / 0.8);
+
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
