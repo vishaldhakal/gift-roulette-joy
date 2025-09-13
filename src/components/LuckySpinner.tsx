@@ -28,8 +28,11 @@ const prizes: Prize[] = [
   { id: '6', name: 'Mystery Gift', image: giftImg, value: '🎁 Surprise' },
 ];
 
-// Duplicate prizes to create seamless scrolling
-const extendedPrizes = [...prizes, ...prizes, ...prizes, ...prizes];
+// Create more duplicates for seamless infinite scrolling
+const extendedPrizes = [
+  ...prizes, ...prizes, ...prizes, ...prizes, 
+  ...prizes, ...prizes, ...prizes, ...prizes
+];
 
 export const LuckySpinner = () => {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -97,8 +100,10 @@ export const LuckySpinner = () => {
     if (spinnerRef.current) {
       const spinner = spinnerRef.current;
       
-      // Reset position
-      spinner.style.transform = 'translateY(0px)';
+      // Reset position to middle section to avoid visible jump
+      const prizeHeight = 120;
+      const resetPosition = prizes.length * prizeHeight * 2; // Start from 2nd cycle
+      spinner.style.transform = `translateY(-${resetPosition}px)`;
       spinner.style.transition = 'none';
       
       // Force reflow
@@ -108,14 +113,20 @@ export const LuckySpinner = () => {
       const winnerIndex = Math.floor(Math.random() * prizes.length);
       const selectedPrize = prizes[winnerIndex];
       
-      // Calculate spin distance (multiple full rotations + winner position)
-      const prizeHeight = 120; // Height of each prize item
-      const spinCycles = 8 + Math.random() * 4; // 8-12 full cycles
-      const finalPosition = (winnerIndex * prizeHeight) + (spinCycles * prizes.length * prizeHeight);
+      // Calculate spin distance for center positioning
+      // We want the winner to end up in the center (which is at container height / 2)
+      const containerHeight = 384; // h-96 = 384px
+      const centerOffset = containerHeight / 2 - prizeHeight / 2; // Offset to center the item
       
-      // Apply spinning animation
-      spinner.style.transition = 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)';
-      spinner.style.transform = `translateY(-${finalPosition}px)`;
+      // Multiple full rotations + winner position - center offset
+      const spinCycles = 12 + Math.random() * 8; // 12-20 full cycles for longer spin
+      const cycleDistance = prizes.length * prizeHeight;
+      const winnerOffset = winnerIndex * prizeHeight;
+      const totalDistance = resetPosition + (spinCycles * cycleDistance) + winnerOffset - centerOffset;
+      
+      // Apply longer spinning animation with better easing
+      spinner.style.transition = 'transform 6s cubic-bezier(0.15, 0, 0.25, 1)';
+      spinner.style.transform = `translateY(-${totalDistance}px)`;
       
       // Show spinning feedback
       toast("🎰 Spinning the wheel of fortune...");
@@ -127,7 +138,7 @@ export const LuckySpinner = () => {
         setIsSpinning(false);
         playWinSound();
         toast(`🎉 Congratulations! You won: ${selectedPrize.name}!`);
-      }, 4000);
+      }, 6000);
     }
   };
 
@@ -137,7 +148,9 @@ export const LuckySpinner = () => {
     setIsSpinning(false);
     
     if (spinnerRef.current) {
-      spinnerRef.current.style.transform = 'translateY(0px)';
+      const prizeHeight = 120;
+      const resetPosition = prizes.length * prizeHeight * 2; // Reset to middle section
+      spinnerRef.current.style.transform = `translateY(-${resetPosition}px)`;
       spinnerRef.current.style.transition = 'none';
     }
     
@@ -156,11 +169,17 @@ export const LuckySpinner = () => {
       </div>
 
       {/* Main Spinner Container */}
-      <Card className="relative w-80 h-96 overflow-hidden border-2 border-gold shadow-gold bg-gradient-purple">
-        {/* Center indicator */}
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-gold shadow-intense z-20 transform -translate-y-1/2">
-          <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gold rounded-full shadow-intense animate-glow-pulse"></div>
+      <Card className="relative w-80 h-96 overflow-hidden border-4 border-gold shadow-intense bg-gradient-purple">
+        {/* Center indicator with enhanced styling */}
+        <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-gold shadow-intense z-20 transform -translate-y-1/2">
+          <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-gold rounded-full shadow-intense animate-glow-pulse border-2 border-gold-light">
+            <div className="absolute inset-1 bg-gold-light rounded-full animate-pulse"></div>
+          </div>
         </div>
+        
+        {/* Enhanced side indicators */}
+        <div className="absolute top-1/2 left-0 w-8 h-1 bg-gradient-gold transform -translate-y-1/2 z-20"></div>
+        <div className="absolute top-1/2 right-0 w-8 h-1 bg-gradient-gold transform -translate-y-1/2 z-20"></div>
         
         {/* Spinner items */}
         <div 
@@ -171,18 +190,18 @@ export const LuckySpinner = () => {
           {extendedPrizes.map((prize, index) => (
             <div
               key={`${prize.id}-${index}`}
-              className="h-30 flex items-center justify-center p-4 border-b border-purple/20 bg-card/50 backdrop-blur-sm"
+              className="h-30 flex items-center justify-center p-4 border-b border-purple/20 bg-card/30 backdrop-blur-sm hover:bg-card/50 transition-colors duration-200"
             >
               <div className="flex flex-col items-center gap-2">
                 <img 
                   src={prize.image} 
                   alt={prize.name}
-                  className="w-16 h-16 object-contain"
+                  className="w-16 h-16 object-contain drop-shadow-lg"
                 />
-                <span className="text-sm font-semibold text-foreground">
+                <span className="text-sm font-semibold text-foreground text-center">
                   {prize.name}
                 </span>
-                <span className="text-xs text-gold font-bold">
+                <span className="text-xs text-gold font-bold bg-gold/10 px-2 py-1 rounded-full">
                   {prize.value}
                 </span>
               </div>
